@@ -1,12 +1,6 @@
 package org.inlamning1grupp5.resource;
 
-import java.util.List;
-
-import org.inlamning1grupp5.model.Admin;
-import org.inlamning1grupp5.model.Customer;
 import org.inlamning1grupp5.service.AdminService;
-import org.inlamning1grupp5.service.CustomerService;
-
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;

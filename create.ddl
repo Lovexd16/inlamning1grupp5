@@ -10,11 +10,11 @@
     create table t_customer (
         subscribed integer,
         customerId bigint not null,
-        email varchar(255),
+        email varchar(255) unique,
         firstName varchar(255),
         lastName varchar(255),
         password varchar(255),
-        username varchar(255),
+        username varchar(255) unique,
         primary key (customerId),
         unique (customerId, username, email)
     );
