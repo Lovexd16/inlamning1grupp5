@@ -1,14 +1,14 @@
 package org.inlamning1grupp5.resource;
 
-import java.util.List;
-
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.inlamning1grupp5.model.Customer;
 import org.inlamning1grupp5.service.CustomerService;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
+import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -39,6 +39,13 @@ public class CustomerResource {
             System.out.println(e);
             return Response.status(Response.Status.BAD_REQUEST).entity("There was a problem creating your account").build();
         }
+    }
+
+    @DELETE
+    @Path("/delete-customer-account")
+    public Response deleteCustomer(@HeaderParam("username") String username, @HeaderParam("password") String password) {
+
+        return customerService.deleteCustomerAccount(username, password);
     }
 
 
