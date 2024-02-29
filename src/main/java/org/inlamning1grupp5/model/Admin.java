@@ -6,6 +6,9 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotEmpty;
+import jakarta.validation.constraints.Size;
 
 @Entity
 @Table(name = "t_admin", uniqueConstraints = @UniqueConstraint(columnNames = {"adminId", "email"}))
@@ -14,8 +17,11 @@ public class Admin {
     @Id
     private Long adminId;
 
+    @Email
     private String email;
 
+    @NotEmpty(message = "You must give a value for password.")
+    @Size(min = 5, max = 15)
     private String password;
 
     public Admin() {
