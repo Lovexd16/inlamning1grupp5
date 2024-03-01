@@ -2,12 +2,10 @@ package org.inlamning1grupp5.service;
 
 import java.util.List;
 import java.util.Random;
-import java.util.Set;
 
 import org.inlamning1grupp5.model.Customer;
 import org.mindrot.jbcrypt.BCrypt;
 
-import io.smallrye.jwt.build.Jwt;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -111,14 +109,24 @@ public class CustomerService{
         }
     }
 
-    public Response createCustomerToken(Customer customer) {
+    @Transactional(Transactional.TxType.REQUIRED)
+    public Response editCustomerAccount(String username, String password, Customer customer) {
         
-        String jwt = Jwt.issuer("DevTeam")
-        .upn(customer.getUsername())
-        .groups(Set.of("Customer"))
-        .sign();
-
-        return Response.ok(jwt).build();
-    }
-    
+        Boolean authenticateCustomer = verifyUser(username, password);
+        if (authenticateCustomer == true) {
+            
+            int editSuccessful = em.createQuery("UPDATE Customer c SET email = :email, password = :password WHERE c.username = :username")
+                .setParameter("email", customer.getEmail())
+                .setParameter("username", username)
+                .setParameter("password", BCrypt.hashpw(customer.getPassword(), BCrypt.gensalt()))
+                .executeUpdate();
+            if (editSuccessful > 0) {
+                return Response.ok().entity(username + " successfully updated.").build(); 
+            } else {
+                return Response.ok().entity("Your account has not been updated.").build();
+            }
+        } else {
+            return Response.status(Response.Status.FORBIDDEN).entity("Incorrect username or password").build();
+        }
+    }    
 }
