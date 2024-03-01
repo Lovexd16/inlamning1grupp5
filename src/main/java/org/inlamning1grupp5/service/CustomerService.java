@@ -108,5 +108,25 @@ public class CustomerService{
             return Response.status(Response.Status.FORBIDDEN).entity("Incorrect username or password").build();
         }
     }
-    
+
+    @Transactional(Transactional.TxType.REQUIRED)
+    public Response editCustomerAccount(String username, String password, Customer customer) {
+        
+        Boolean authenticateCustomer = verifyUser(username, password);
+        if (authenticateCustomer == true) {
+            
+            int editSuccessful = em.createQuery("UPDATE Customer c SET email = :email, password = :password WHERE c.username = :username")
+                .setParameter("email", customer.getEmail())
+                .setParameter("username", username)
+                .setParameter("password", BCrypt.hashpw(customer.getPassword(), BCrypt.gensalt()))
+                .executeUpdate();
+            if (editSuccessful > 0) {
+                return Response.ok().entity(username + " successfully updated.").build(); 
+            } else {
+                return Response.ok().entity("Your account has not been updated.").build();
+            }
+        } else {
+            return Response.status(Response.Status.FORBIDDEN).entity("Incorrect username or password").build();
+        }
+    }    
 }

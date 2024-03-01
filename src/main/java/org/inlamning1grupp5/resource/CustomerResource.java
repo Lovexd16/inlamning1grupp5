@@ -1,5 +1,6 @@
 package org.inlamning1grupp5.resource;
 
+import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.inlamning1grupp5.model.Customer;
 import org.inlamning1grupp5.service.CustomerService;
@@ -9,6 +10,7 @@ import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -24,6 +26,10 @@ public class CustomerResource {
     CustomerService customerService;
 
     @GET
+    @Operation(
+        summary = "See all customers",
+        description = "Collect a JSON object of all the customers currently in the database"
+    )
     @Path("/get-all-customers")
     public Response getAllCustomers() {
         return Response.ok(customerService.findAll()).build();
@@ -53,6 +59,14 @@ public class CustomerResource {
     public Response deleteCustomer(@HeaderParam("username") String username, @HeaderParam("password") String password) {
 
         return customerService.deleteCustomerAccount(username, password);
+    }
+
+    @PATCH
+    @Path("/edit-user-account")
+    public Response editCustomer(@HeaderParam("username") String username, @HeaderParam("password") String password, @RequestBody Customer customer) {
+
+        System.out.println(customer.getEmail());
+        return customerService.editCustomerAccount(username, password, customer);
     }
 
 
