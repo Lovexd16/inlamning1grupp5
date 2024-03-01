@@ -41,6 +41,13 @@ public class CustomerResource {
         }
     }
 
+    @GET
+    @Path("/login")
+    public Response customerAccount(@HeaderParam("username") String username, @HeaderParam("password") String password) {
+        
+        return customerService.getCustomerAccount(username, password);
+    }
+
     @DELETE
     @Path("/delete-customer-account")
     public Response deleteCustomer(@HeaderParam("username") String username, @HeaderParam("password") String password) {
