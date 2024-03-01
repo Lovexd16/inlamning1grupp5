@@ -96,5 +96,17 @@ public class CustomerService{
             return false;
         }
     }
+
+    public Response getCustomerAccount(String username, String password) {
+        Boolean authenticateCustomer = verifyUser(username, password);
+        if (authenticateCustomer == true) {
+            Response response = findCustomerByUsername(username);
+            Customer customer = (Customer) response.getEntity();
+            customer.setPassword("");
+            return Response.ok(customer).build();
+        } else {
+            return Response.status(Response.Status.FORBIDDEN).entity("Incorrect username or password").build();
+        }
+    }
     
 }
