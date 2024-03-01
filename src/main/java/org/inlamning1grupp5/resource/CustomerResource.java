@@ -45,7 +45,10 @@ public class CustomerResource {
     @Path("/login")
     public Response customerAccount(@HeaderParam("username") String username, @HeaderParam("password") String password) {
         
-        return customerService.getCustomerAccount(username, password);
+        Response getCustomer = customerService.getCustomerAccount(username, password);
+        Response getToken = customerService.createCustomerToken((Customer) getCustomer.getEntity());
+        System.out.println(getToken);
+        return Response.ok(getCustomer).build();
     }
 
     @DELETE

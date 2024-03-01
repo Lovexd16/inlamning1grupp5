@@ -2,10 +2,12 @@ package org.inlamning1grupp5.service;
 
 import java.util.List;
 import java.util.Random;
+import java.util.Set;
 
 import org.inlamning1grupp5.model.Customer;
 import org.mindrot.jbcrypt.BCrypt;
 
+import io.smallrye.jwt.build.Jwt;
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
@@ -107,6 +109,16 @@ public class CustomerService{
         } else {
             return Response.status(Response.Status.FORBIDDEN).entity("Incorrect username or password").build();
         }
+    }
+
+    public Response createCustomerToken(Customer customer) {
+        
+        String jwt = Jwt.issuer("DevTeam")
+        .upn(customer.getUsername())
+        .groups(Set.of("Customer"))
+        .sign();
+
+        return Response.ok(jwt).build();
     }
     
 }
