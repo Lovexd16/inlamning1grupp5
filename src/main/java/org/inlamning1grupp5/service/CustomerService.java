@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Random;
 
 import org.inlamning1grupp5.model.Customer;
+import org.mindrot.jbcrypt.BCrypt;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -23,6 +24,17 @@ public class CustomerService{
         return em.createQuery("SELECT c FROM Customer c", Customer.class).getResultList();
     }
 
+    public Response findCustomerByUsername(String username) {
+        try {
+            return Response.ok(em.createQuery("SELECT c FROM Customer c WHERE c.username = :username", Customer.class)
+                .setParameter("username", username)
+                .getSingleResult()).build();
+        } catch (NoResultException e) {
+            System.out.println(e);
+            return Response.status(Response.Status.NOT_FOUND).entity("No user found.").build();
+        }
+    }
+
     @Transactional(Transactional.TxType.REQUIRED)
     public Response createNewCustomer(Customer customer) {
         
@@ -39,6 +51,8 @@ public class CustomerService{
             Random random = new Random();
             customer.setCustomerId(random.nextLong(100000000, 999999999));
             customer.setSubscribed(0);
+            String encrypted = BCrypt.hashpw(customer.getPassword(), BCrypt.gensalt());
+            customer.setPassword(encrypted);
             System.out.println(customer.getLastName());
             System.out.println(customer.getCustomerId());
             em.persist(customer);
@@ -49,16 +63,38 @@ public class CustomerService{
     @Transactional(Transactional.TxType.REQUIRED)
     public Response deleteCustomerAccount(String username, String password) {
 
-            int deleteSuccessful = em.createQuery("DELETE FROM Customer c WHERE c.username = :username AND c.password = :password")
-                .setParameter("username", username)
-                .setParameter("password", password)
-                .executeUpdate();
-
-            if (deleteSuccessful > 0) {
-                return Response.ok().entity(username + " successfully deleted.").build(); 
+            Boolean userAuthenticated = verifyUser(username, password);
+            System.out.println(userAuthenticated);
+            if (userAuthenticated == true) {
+                Response customResponse = findCustomerByUsername(username);
+                Customer customer = (Customer) customResponse.getEntity();
+                String encryptedPassword = customer.getPassword();
+                int deleteSuccessful = em.createQuery("DELETE FROM Customer c WHERE c.username = :username AND c.password = :password")
+                    .setParameter("username", username)
+                    .setParameter("password", encryptedPassword)
+                    .executeUpdate();
+                System.out.println("success: " + deleteSuccessful);
+                if (deleteSuccessful > 0) {
+                    return Response.ok().entity(username + " successfully deleted.").build(); 
+                } else {
+                    return Response.ok().entity("Customer account doesnt exist.").build();
+                }
             } else {
-                return Response.ok().entity("Customer account doesnt exist.").build();
+                return Response.status(Response.Status.FORBIDDEN).entity("Incorrect username or password. Try again.").build();
             }
+
+    }
+
+    public boolean verifyUser(String username, String password) {
+        try {
+            Response customResponse = findCustomerByUsername(username);
+            Customer customer = (Customer) customResponse.getEntity();
+            String encryptedPassword = customer.getPassword();
+            return BCrypt.checkpw(password, encryptedPassword);
+        } catch (Exception e) {
+            System.out.println(e);
+            return false;
+        }
     }
     
 }

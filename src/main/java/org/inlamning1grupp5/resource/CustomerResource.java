@@ -32,7 +32,7 @@ public class CustomerResource {
     @POST
     @Path("/create-customer-account") 
     public Response createCustomer(@RequestBody Customer customer) {
-        System.out.println(customer.getFirstName());
+
         try {
             return customerService.createNewCustomer(customer);
         } catch (Exception e) {

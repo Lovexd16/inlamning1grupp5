@@ -36,7 +36,6 @@ public class Customer {
     private String username;
 
     @NotEmpty(message = "You must give a value for password.")
-    @Size(min = 5, max = 15)
     private String password;
 
     @NotNull
