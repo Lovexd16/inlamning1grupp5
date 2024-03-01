@@ -1,7 +1,6 @@
 package org.inlamning1grupp5.model;
 
-import java.util.Random;
-
+import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -9,7 +8,6 @@ import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
-import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 
 @Entity
@@ -17,6 +15,7 @@ import jakarta.validation.constraints.Size;
 public class Customer {
     
     @Id
+    @Column(unique = true)
     private Long customerId;
 
     @NotEmpty(message = "You must give a value for first name.")
@@ -28,10 +27,11 @@ public class Customer {
     private String lastName;
 
     @Email
+    @Column(unique = true)
     private String email;
 
     @NotEmpty(message = "You must give a value for username.")
-    @Pattern(regexp = "[a-zA-Z0-9]", message = "Username can only containt letters and numbers.")
+    @Column(unique = true)
     @Size(min = 5, max = 15)
     private String username;
 
@@ -41,13 +41,6 @@ public class Customer {
 
     @NotNull
     private Integer subscribed;
-
-    public Customer() {
-
-        Random random = new Random();
-        this.customerId = random.nextLong(100000000, 999999999);
-        this.subscribed = 0;
-    }
 
     public Long getCustomerId() {
         return customerId;
