@@ -9,7 +9,6 @@ import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
-import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 
@@ -49,21 +48,17 @@ public class CustomerService{
 
     @Transactional(Transactional.TxType.REQUIRED)
     public Response deleteCustomerAccount(String username, String password) {
-        try {
 
-            em.createQuery("DELETE FROM Customer c WHERE c.username = :username AND c.password = :password")
+            int deleteSuccessful = em.createQuery("DELETE FROM Customer c WHERE c.username = :username AND c.password = :password")
                 .setParameter("username", username)
                 .setParameter("password", password)
                 .executeUpdate();
 
-            return Response.ok().entity(username + " successfully deleted.").build(); 
-
-        } catch (Exception e) {
-            System.out.println(e);
-            return Response.ok().entity("Customer account doesnt exist.").build();
-        }
-
-
+            if (deleteSuccessful > 0) {
+                return Response.ok().entity(username + " successfully deleted.").build(); 
+            } else {
+                return Response.ok().entity("Customer account doesnt exist.").build();
+            }
     }
     
 }
