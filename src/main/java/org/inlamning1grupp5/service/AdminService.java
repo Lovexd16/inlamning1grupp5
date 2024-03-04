@@ -3,6 +3,8 @@ package org.inlamning1grupp5.service;
 import java.util.List;
 
 import org.inlamning1grupp5.model.Admin;
+import org.inlamning1grupp5.model.Customer;
+import org.inlamning1grupp5.model.Customer;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -18,9 +20,9 @@ public class AdminService {
     @Inject
     EntityManager em;
 
-    public List<Admin> findAll() {
-        return em.createQuery("SELECT a FROM Admin a", Admin.class).getResultList();
-    }
+    // public List<Admin> findAllAdmins() {
+    //     return em.createQuery("SELECT a FROM Admin a", Admin.class).getResultList();
+    // }
     
     public Response getAdminAccount(String email, String password) {
         Boolean authenticateAdmin = verifyAdmin(email, password);
@@ -42,5 +44,32 @@ public class AdminService {
             return false;
         }
     }
+
+    public Response findAllCustomers(String email, String password) {
+        Boolean authenticateAdmin = verifyAdmin(email, password);
+        if (authenticateAdmin == true) {
+            return Response.ok(em.createQuery("SELECT c FROM Customer c", Customer.class).getResultList()).build();
+        } else {
+            return Response.status(Response.Status.FORBIDDEN).entity("You are not allowed.").build();
+        }
+    }
+
+    @Transactional(Transactional.TxType.REQUIRED)
+    public Response deleteCustomerAccount(String email, String password, String username) {
+        Boolean authenticateAdmin = verifyAdmin(email, password);
+        if (authenticateAdmin == true) {
+            int deleteSuccessful = em.createQuery("DELETE FROM Customer c WHERE c.username = :username")
+                .setParameter("username", username)
+                .executeUpdate();
+                if (deleteSuccessful > 0) {
+                    return Response.ok().entity(username + " successfully deleted.").build(); 
+                } else {
+                    return Response.ok().entity("Customer account doesnt exist.").build();
+                }
+        } else {
+            return Response.status(Response.Status.FORBIDDEN).entity("You are not allowed.").build();
+        }
+    }
+
 }
 

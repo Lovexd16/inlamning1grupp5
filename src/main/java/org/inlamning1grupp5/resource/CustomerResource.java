@@ -25,16 +25,6 @@ public class CustomerResource {
     @Inject
     CustomerService customerService;
 
-    @GET
-    @Operation(
-        summary = "See all customers",
-        description = "Collect a JSON object of all the customers currently in the database"
-    )
-    @Path("/get-all-customers")
-    public Response getAllCustomers() {
-        return Response.ok(customerService.findAll()).build();
-    }
-
     @POST
     @Path("/create-customer-account") 
     public Response createCustomer(@RequestBody Customer customer) {

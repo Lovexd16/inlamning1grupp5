@@ -20,10 +20,6 @@ public class CustomerService{
     @Inject
     EntityManager em;
 
-    public List<Customer> findAll() {
-        return em.createQuery("SELECT c FROM Customer c", Customer.class).getResultList();
-    }
-
     public Response findCustomerByUsername(String username) {
         try {
             return Response.ok(em.createQuery("SELECT c FROM Customer c WHERE c.username = :username", Customer.class)
