@@ -49,5 +49,11 @@ public class AdminResource {
         return adminService.deleteCustomerAccount(email, password, username);
     }
 
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/count-customers")
+    public Response countCustomers(@HeaderParam("email") String email, @HeaderParam("password") String password) {
+        return adminService.countAllCustomers(email, password);
+    }
 }
 
