@@ -13,5 +13,5 @@ INSERT INTO t_customer (customerId, firstName, lastName, email, username, passwo
 (567890123, 'Eva', 'Brown', 'eva.brown@example.com', 'eva_b', '$2a$12$zZZ0X7C3MCek32dZWdncg.Ey4CBVeKQHHWbb/QvOmy5nCkEAlbY5y', 1);
 
 INSERT INTO t_admin (adminId, email, password) VALUES
-(123456789, 'admin1@example.com', 'AdminPass123'),
-(234567890, 'admin2@example.com', 'SecureAdminPwd');
+(123456789, 'admin1@example.com', '0f7d9d9a44a85c8f3d2bc47c865b06baad091a5c8b1bc578e346df2f23c0327c'),
+(234567890, 'admin2@example.com', 'c1652a68f3de88e1e31b81eac1ec8a4e200a0f9f1145a1f1c5f4aae769a53f2b');

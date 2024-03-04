@@ -4,6 +4,7 @@ import org.inlamning1grupp5.service.AdminService;
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
+import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.core.MediaType;
 import jakarta.ws.rs.core.Response;
@@ -22,4 +23,12 @@ public class AdminResource {
     public Response getAllAdmins() {
         return Response.ok(adminService.findAll()).build();
     }
+    
+    @GET
+    @Path("/login")
+    public Response adminAccount(@HeaderParam("email") String email, @HeaderParam("password") String password) {
+        
+        return adminService.getAdminAccount(email, password);
+    }
 }
+
