@@ -1,6 +1,5 @@
 package org.inlamning1grupp5.resource;
 
-import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.inlamning1grupp5.model.Customer;
 import org.inlamning1grupp5.service.CustomerService;

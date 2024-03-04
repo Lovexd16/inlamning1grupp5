@@ -1,6 +1,5 @@
 package org.inlamning1grupp5.service;
 
-import java.util.List;
 import java.util.Random;
 
 import org.inlamning1grupp5.model.Customer;
