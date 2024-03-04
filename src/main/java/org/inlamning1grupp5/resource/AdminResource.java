@@ -55,5 +55,12 @@ public class AdminResource {
     public Response countCustomers(@HeaderParam("email") String email, @HeaderParam("password") String password) {
         return adminService.countAllCustomers(email, password);
     }
+
+    @GET
+    @Produces(MediaType.TEXT_PLAIN)
+    @Path("/count-subscribers")
+    public Response countSubscribers(@HeaderParam("email") String email, @HeaderParam("password") String password) {
+        return adminService.countAllSubscribers(email, password);
+    }
 }
 
