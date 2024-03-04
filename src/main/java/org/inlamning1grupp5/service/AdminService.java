@@ -80,5 +80,15 @@ public class AdminService {
         }
     }
 
+    public Response countAllSubscribers(String email, String password) {
+        Boolean authenticateAdmin = verifyAdmin(email, password);
+        if (authenticateAdmin == true) {
+            return Response.ok(em.createQuery("SELECT COUNT(c) FROM Customer c WHERE c.subscribed = 1", Long.class).getSingleResult()).build();
+            
+        } else {
+            return Response.status(Response.Status.FORBIDDEN).entity("You are not allowed to do this.").build();
+        }
+    }
+
 }
 
