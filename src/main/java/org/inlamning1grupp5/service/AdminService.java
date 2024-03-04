@@ -1,14 +1,11 @@
 package org.inlamning1grupp5.service;
 
-
-import org.inlamning1grupp5.model.Admin;
 import org.inlamning1grupp5.model.Customer;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
 import jakarta.persistence.EntityManager;
 import jakarta.persistence.NoResultException;
-import jakarta.persistence.Query;
 import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 
@@ -34,7 +31,7 @@ public class AdminService {
 
     public boolean verifyAdmin(String email, String password) {
         try {
-            Admin findAdmin = (Admin) em.createQuery("SELECT a FROM Admin a WHERE a.email = :email AND a.password = :password")
+            em.createQuery("SELECT a FROM Admin a WHERE a.email = :email AND a.password = :password")
             .setParameter("email", email)
             .setParameter("password", password)
             .getSingleResult();
