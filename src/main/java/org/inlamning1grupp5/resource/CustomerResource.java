@@ -1,7 +1,7 @@
 package org.inlamning1grupp5.resource;
 
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
-import org.inlamning1grupp5.model.Customer;
+import org.inlamning1grupp5.model.User;
 import org.inlamning1grupp5.service.CustomerService;
 
 import jakarta.inject.Inject;
@@ -26,7 +26,7 @@ public class CustomerResource {
 
     @POST
     @Path("/create-customer-account") 
-    public Response createCustomer(@RequestBody Customer customer) {
+    public Response createCustomer(@RequestBody User customer) {
 
         try {
             return customerService.createNewCustomer(customer);
@@ -52,7 +52,7 @@ public class CustomerResource {
 
     @PATCH
     @Path("/edit-user-account")
-    public Response editCustomer(@HeaderParam("username") String username, @HeaderParam("password") String password, @RequestBody Customer customer) {
+    public Response editCustomer(@HeaderParam("username") String username, @HeaderParam("password") String password, @RequestBody User customer) {
 
         System.out.println(customer.getEmail());
         return customerService.editCustomerAccount(username, password, customer);

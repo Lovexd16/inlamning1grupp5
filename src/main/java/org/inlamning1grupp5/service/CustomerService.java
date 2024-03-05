@@ -2,7 +2,7 @@ package org.inlamning1grupp5.service;
 
 import java.util.Random;
 
-import org.inlamning1grupp5.model.Customer;
+import org.inlamning1grupp5.model.User;
 import org.mindrot.jbcrypt.BCrypt;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -21,7 +21,7 @@ public class CustomerService{
 
     public Response findCustomerByUsername(String username) {
         try {
-            return Response.ok(em.createQuery("SELECT c FROM Customer c WHERE c.username = :username", Customer.class)
+            return Response.ok(em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class)
                 .setParameter("username", username)
                 .getSingleResult()).build();
         } catch (NoResultException e) {
@@ -31,16 +31,16 @@ public class CustomerService{
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public Response createNewCustomer(Customer customer) {
+    public Response createNewCustomer(User customer) {
         
         try {
             try {
-                em.createQuery("SELECT c FROM Customer c WHERE c.email = :email", Customer.class).setParameter("email", customer.getEmail()).getSingleResult();
+                em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class).setParameter("email", customer.getEmail()).getSingleResult();
                 return Response.status(Response.Status.CONFLICT).entity("This email adress is already connected to an account! Both the email and the username must be unique.").build();
             } catch (Exception e) {
                 System.out.println(e);
             }
-            em.createQuery("SELECT c FROM Customer c WHERE c.username = :username", Customer.class).setParameter("username", customer.getUsername()).getSingleResult();
+            em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class).setParameter("username", customer.getUsername()).getSingleResult();
             return Response.status(Response.Status.CONFLICT).entity("This username is already in use! Both the email and the username must be unique.").build();
         } catch (NoResultException e) {
             Random random = new Random();
@@ -62,9 +62,9 @@ public class CustomerService{
             System.out.println(userAuthenticated);
             if (userAuthenticated == true) {
                 Response customResponse = findCustomerByUsername(username);
-                Customer customer = (Customer) customResponse.getEntity();
+                User customer = (User) customResponse.getEntity();
                 String encryptedPassword = customer.getPassword();
-                int deleteSuccessful = em.createQuery("DELETE FROM Customer c WHERE c.username = :username AND c.password = :password")
+                int deleteSuccessful = em.createQuery("DELETE FROM User u WHERE u.username = :username AND u.password = :password")
                     .setParameter("username", username)
                     .setParameter("password", encryptedPassword)
                     .executeUpdate();
@@ -83,7 +83,7 @@ public class CustomerService{
     public boolean verifyUser(String username, String password) {
         try {
             Response customResponse = findCustomerByUsername(username);
-            Customer customer = (Customer) customResponse.getEntity();
+            User customer = (User) customResponse.getEntity();
             String encryptedPassword = customer.getPassword();
             return BCrypt.checkpw(password, encryptedPassword);
         } catch (Exception e) {
@@ -96,7 +96,7 @@ public class CustomerService{
         Boolean authenticateCustomer = verifyUser(username, password);
         if (authenticateCustomer == true) {
             Response response = findCustomerByUsername(username);
-            Customer customer = (Customer) response.getEntity();
+            User customer = (User) response.getEntity();
             customer.setPassword("");
             return Response.ok(customer).build();
         } else {
@@ -105,12 +105,12 @@ public class CustomerService{
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public Response editCustomerAccount(String username, String password, Customer customer) {
+    public Response editCustomerAccount(String username, String password, User customer) {
         
         Boolean authenticateCustomer = verifyUser(username, password);
         if (authenticateCustomer == true) {
             
-            int editSuccessful = em.createQuery("UPDATE Customer c SET email = :email, password = :password WHERE c.username = :username")
+            int editSuccessful = em.createQuery("UPDATE User u SET email = :email, password = :password WHERE u.username = :username")
                 .setParameter("email", customer.getEmail())
                 .setParameter("username", username)
                 .setParameter("password", BCrypt.hashpw(customer.getPassword(), BCrypt.gensalt()))
