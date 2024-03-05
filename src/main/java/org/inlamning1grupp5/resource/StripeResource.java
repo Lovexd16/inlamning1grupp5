@@ -3,6 +3,7 @@ package org.inlamning1grupp5.resource;
 import java.util.HashMap;
 
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.inlamning1grupp5.model.Guest;
 import org.inlamning1grupp5.model.StripeModel;
 import org.inlamning1grupp5.service.StripeService;
 
@@ -65,10 +66,10 @@ public class StripeResource {
     @POST
     @Path("/one-time-purchase")
     public Response oneTimePurchase(@HeaderParam("productId") String productId, @HeaderParam("username") String username,
-        @HeaderParam("password") String password, @RequestBody Object customer) throws StripeException {
+        @HeaderParam("password") String password, @RequestBody Guest customer) throws StripeException {
         
         Stripe.apiKey = StripeModel.getApiKey();
-        if (username.isEmpty() && password.isEmpty()) {
+        if (username == null && password == null) {
             return stripeService.oneTimePurchaseAsGuest(productId, customer);
         } else {
             System.out.println("here: " + username + " " + password);

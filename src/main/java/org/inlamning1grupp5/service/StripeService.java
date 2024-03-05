@@ -2,6 +2,7 @@ package org.inlamning1grupp5.service;
 
 import java.util.HashMap;
 
+import org.inlamning1grupp5.model.Guest;
 import org.inlamning1grupp5.model.User;
 
 import com.stripe.exception.StripeException;
@@ -26,13 +27,27 @@ public class StripeService {
     @Inject
     CustomerService customerService;
 
-    public Response oneTimePurchaseAsGuest(String productId, Object customer) throws StripeException {
+    public Response oneTimePurchaseAsGuest(String productId, Guest customer) throws StripeException {
         Product product = Product.retrieve(productId);
         Price price = Price.retrieve(product.getDefaultPrice());
+
+        CustomerCreateParams customerParams = CustomerCreateParams.builder()
+                .setName(customer.getFirstName() + " " + customer.getLastName())
+                .setEmail(customer.getEmail())
+                .setAddress(Address.builder()
+                    .setCity(customer.getCity())
+                    .setLine1(customer.getAddress1())
+                    .setLine2(customer.getAddress2())
+                    .setPostalCode(customer.getPostnumber())
+                    .build())
+                .build();
+            Customer customerFinal = Customer.create(customerParams);
+
         PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
             .setAmount(price.getUnitAmount())
             .setCurrency("SEK")
             .setDescription(product.getName())
+            .setCustomer(customerFinal.getId())
             .setAutomaticPaymentMethods(PaymentIntentCreateParams.AutomaticPaymentMethods.builder()
                 .setEnabled(true)
                 .build())
@@ -48,7 +63,7 @@ public class StripeService {
         }
     }
 
-    public Response oneTimePurchaseByLogin(String productId, String username, String password, Object customer) throws StripeException {
+    public Response oneTimePurchaseByLogin(String productId, String username, String password, Guest customer) throws StripeException {
         Product product = Product.retrieve(productId);
 
         Boolean authenticateCustomer = customerService.verifyUser(username, password);
@@ -65,7 +80,12 @@ public class StripeService {
             CustomerCreateParams customerParams = CustomerCreateParams.builder()
                 .setName(customerName)
                 .setEmail(customerFound.getEmail())
-                // .setAddress(Address)
+                .setAddress(Address.builder()
+                    .setCity(customer.getCity())
+                    .setLine1(customer.getAddress1())
+                    .setLine2(customer.getAddress2())
+                    .setPostalCode(customer.getPostnumber())
+                    .build())
                 .build();
             Customer customerFinal = Customer.create(customerParams);
             PaymentIntentCreateParams params = PaymentIntentCreateParams.builder()
