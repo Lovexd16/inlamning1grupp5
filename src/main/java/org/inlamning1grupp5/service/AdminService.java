@@ -1,6 +1,6 @@
 package org.inlamning1grupp5.service;
 
-import org.inlamning1grupp5.model.Customer;
+import org.inlamning1grupp5.model.User;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -44,7 +44,7 @@ public class AdminService {
     public Response findAllCustomers(String email, String password) {
         Boolean authenticateAdmin = verifyAdmin(email, password);
         if (authenticateAdmin == true) {
-            return Response.ok(em.createQuery("SELECT c FROM Customer c", Customer.class).getResultList()).build();
+            return Response.ok(em.createQuery("SELECT u FROM User u", User.class).getResultList()).build();
         } else {
             return Response.status(Response.Status.FORBIDDEN).entity("You are not allowed to do this.").build();
         }
@@ -54,7 +54,7 @@ public class AdminService {
     public Response deleteCustomerAccount(String email, String password, String username) {
         Boolean authenticateAdmin = verifyAdmin(email, password);
         if (authenticateAdmin == true) {
-            int deleteSuccessful = em.createQuery("DELETE FROM Customer c WHERE c.username = :username")
+            int deleteSuccessful = em.createQuery("DELETE FROM User u WHERE u.username = :username")
                 .setParameter("username", username)
                 .executeUpdate();
                 if (deleteSuccessful > 0) {
@@ -70,7 +70,7 @@ public class AdminService {
     public Response countAllCustomers(String email, String password) {
         Boolean authenticateAdmin = verifyAdmin(email, password);
         if (authenticateAdmin == true) {
-            return Response.ok(em.createQuery("SELECT COUNT(c) FROM Customer c", Long.class).getSingleResult()).build();
+            return Response.ok(em.createQuery("SELECT COUNT(u) FROM User u", Long.class).getSingleResult()).build();
             
         } else {
             return Response.status(Response.Status.FORBIDDEN).entity("You are not allowed to do this.").build();
@@ -80,7 +80,7 @@ public class AdminService {
     public Response countAllSubscribers(String email, String password) {
         Boolean authenticateAdmin = verifyAdmin(email, password);
         if (authenticateAdmin == true) {
-            return Response.ok(em.createQuery("SELECT COUNT(c) FROM Customer c WHERE c.subscribed = 1", Long.class).getSingleResult()).build();
+            return Response.ok(em.createQuery("SELECT COUNT(u) FROM User u WHERE u.subscribed = 1", Long.class).getSingleResult()).build();
             
         } else {
             return Response.status(Response.Status.FORBIDDEN).entity("You are not allowed to do this.").build();
