@@ -135,7 +135,7 @@ public class UserService{
     public Response getPodcastFromServer(String productId) {
         
         try {
-            String newPath = "/static/audio/" + productId + ".mp3";
+            String newPath = productId + ".mp3";
             java.nio.file.Path filePath = java.nio.file.Path.of(newPath);
             System.out.println("File Path: " + filePath.toString());
             InputStream audioFile = Files.newInputStream(filePath);
