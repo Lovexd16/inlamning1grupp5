@@ -70,4 +70,19 @@ public class StripeResource {
             return stripeService.oneTimePurchaseByLogin(productId, username, password, customer);
         }
     }
+
+    @POST
+    @Path("/activate-subscription")
+    public Response subcribe(@HeaderParam("productId") String productId, @HeaderParam("username") String username,
+    @HeaderParam("password") String password, Guest address) throws StripeException {
+
+        Stripe.apiKey = StripeModel.getApiKey();
+
+        if (username == null || password == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("You need to enter your username and password!").build();
+        } else {
+            System.out.println("here: " + username + " " + password);
+            return stripeService.activateSubscription(productId, username, password, address);
+        }
+    }
 }
