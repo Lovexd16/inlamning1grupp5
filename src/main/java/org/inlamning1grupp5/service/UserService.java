@@ -1,7 +1,10 @@
 package org.inlamning1grupp5.service;
 
+import java.io.InputStream;
+import java.nio.file.Files;
 import java.util.Random;
 
+import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.inlamning1grupp5.model.User;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -18,6 +21,10 @@ public class UserService{
 
     @Inject
     EntityManager em;
+
+    @Inject
+    @ConfigProperty(name = "mp3.file.path")
+    String mp3FilePath;
 
     public Response findUserByUsername(String username) {
         try {
@@ -123,5 +130,20 @@ public class UserService{
         } else {
             return Response.status(Response.Status.FORBIDDEN).entity("Incorrect username or password").build();
         }
+    }
+
+    public Response getPodcastFromServer(String productId) {
+        
+        try {
+            String newPath = "/static/audio/" + productId + ".mp3";
+            java.nio.file.Path filePath = java.nio.file.Path.of(newPath);
+            System.out.println("File Path: " + filePath.toString());
+            InputStream audioFile = Files.newInputStream(filePath);
+            System.out.println(productId);
+            return Response.ok(audioFile).build();
+        } catch (Exception e) {
+            return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
+        }
+        
     }    
 }

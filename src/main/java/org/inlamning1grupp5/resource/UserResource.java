@@ -4,6 +4,7 @@ import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.inlamning1grupp5.model.User;
 import org.inlamning1grupp5.service.UserService;
 
+
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -58,5 +59,11 @@ public class UserResource {
         return userService.editUserAccount(username, password, user);
     }
 
+    @GET
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Path("get-podcast")
+    public Response getPodcast(@HeaderParam("productId") String productId) {
 
+        return userService.getPodcastFromServer(productId);   
+    }
 }
