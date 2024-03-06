@@ -13,7 +13,6 @@ import com.stripe.model.Product;
 import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.CustomerCreateParams.Address;
 import com.stripe.param.PaymentIntentCreateParams;
-import com.stripe.param.PaymentMethodCreateParams;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -25,7 +24,7 @@ import jakarta.ws.rs.core.Response;
 public class StripeService {
 
     @Inject
-    CustomerService customerService;
+    UserService userService;
 
     public Response oneTimePurchaseAsGuest(String productId, Guest customer) throws StripeException {
         Product product = Product.retrieve(productId);
@@ -66,14 +65,14 @@ public class StripeService {
     public Response oneTimePurchaseByLogin(String productId, String username, String password, Guest customer) throws StripeException {
         Product product = Product.retrieve(productId);
 
-        Boolean authenticateCustomer = customerService.verifyUser(username, password);
+        Boolean authenticateCustomer = userService.verifyUser(username, password);
 
         if (authenticateCustomer == true) {
             System.out.println(username + "!!!!!!!!");
 
             Price price = Price.retrieve(product.getDefaultPrice());
 
-            Response findCustomer = customerService.findCustomerByUsername(username);
+            Response findCustomer = userService.findUserByUsername(username);
             User customerFound = (User) findCustomer.getEntity();
             String customerName = customerFound.getFirstName() + " " + customerFound.getLastName();
             
