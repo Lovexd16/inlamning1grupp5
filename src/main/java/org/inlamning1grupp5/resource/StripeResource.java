@@ -1,7 +1,5 @@
 package org.inlamning1grupp5.resource;
 
-import java.util.HashMap;
-
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.inlamning1grupp5.model.Guest;
 import org.inlamning1grupp5.model.StripeModel;
@@ -9,7 +7,6 @@ import org.inlamning1grupp5.service.StripeService;
 
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
-import jakarta.ws.rs.FormParam;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
 import jakarta.ws.rs.POST;
@@ -20,11 +17,8 @@ import jakarta.ws.rs.core.Response;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
-import com.stripe.model.PaymentIntent;
-import com.stripe.model.Price;
 import com.stripe.model.Product;
 import com.stripe.model.ProductCollection;
-import com.stripe.param.PaymentIntentCreateParams;
 import com.stripe.param.ProductListParams;
 
 @Path("/api/customer/stripe")

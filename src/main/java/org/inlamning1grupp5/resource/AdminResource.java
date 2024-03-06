@@ -35,25 +35,25 @@ public class AdminResource {
 
     @GET
     @Operation(
-        summary = "See all customers",
-        description = "Collect a JSON object of all the customers currently in the database"
+        summary = "See all users",
+        description = "Collect a JSON object of all the users currently in the database"
     )
-    @Path("/get-all-customers")
-    public Response getAllCustomers(@HeaderParam("email") String email, @HeaderParam("password") String password) {
-        return adminService.findAllCustomers(email, password);
+    @Path("/get-all-users")
+    public Response getAllUsers(@HeaderParam("email") String email, @HeaderParam("password") String password) {
+        return adminService.findAllUsers(email, password);
     }
 
     @DELETE
-    @Path("/delete-customer")
-    public Response deleteCustomer(@HeaderParam("email") String email, @HeaderParam("password") String password, @HeaderParam("username") String username) {
-        return adminService.deleteCustomerAccount(email, password, username);
+    @Path("/delete-user")
+    public Response deleteUser(@HeaderParam("email") String email, @HeaderParam("password") String password, @HeaderParam("username") String username) {
+        return adminService.deleteUserAccount(email, password, username);
     }
 
     @GET
     @Produces(MediaType.TEXT_PLAIN)
-    @Path("/count-customers")
-    public Response countCustomers(@HeaderParam("email") String email, @HeaderParam("password") String password) {
-        return adminService.countAllCustomers(email, password);
+    @Path("/count-users")
+    public Response countUsers(@HeaderParam("email") String email, @HeaderParam("password") String password) {
+        return adminService.countAllUsers(email, password);
     }
 
     @GET

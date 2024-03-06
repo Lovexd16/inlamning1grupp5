@@ -41,7 +41,7 @@ public class AdminService {
         }
     }
 
-    public Response findAllCustomers(String email, String password) {
+    public Response findAllUsers(String email, String password) {
         Boolean authenticateAdmin = verifyAdmin(email, password);
         if (authenticateAdmin == true) {
             return Response.ok(em.createQuery("SELECT u FROM User u", User.class).getResultList()).build();
@@ -51,7 +51,7 @@ public class AdminService {
     }
 
     @Transactional(Transactional.TxType.REQUIRED)
-    public Response deleteCustomerAccount(String email, String password, String username) {
+    public Response deleteUserAccount(String email, String password, String username) {
         Boolean authenticateAdmin = verifyAdmin(email, password);
         if (authenticateAdmin == true) {
             int deleteSuccessful = em.createQuery("DELETE FROM User u WHERE u.username = :username")
@@ -60,14 +60,14 @@ public class AdminService {
                 if (deleteSuccessful > 0) {
                     return Response.ok().entity(username + " successfully deleted.").build(); 
                 } else {
-                    return Response.ok().entity("Customer account doesnt exist.").build();
+                    return Response.ok().entity("User account doesnt exist.").build();
                 }
         } else {
             return Response.status(Response.Status.FORBIDDEN).entity("You are not allowed to do this.").build();
         }
     }
 
-    public Response countAllCustomers(String email, String password) {
+    public Response countAllUsers(String email, String password) {
         Boolean authenticateAdmin = verifyAdmin(email, password);
         if (authenticateAdmin == true) {
             return Response.ok(em.createQuery("SELECT COUNT(u) FROM User u", Long.class).getSingleResult()).build();

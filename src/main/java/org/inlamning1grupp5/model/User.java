@@ -11,12 +11,12 @@ import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
 
 @Entity
-@Table(name = "t_customer", uniqueConstraints = @UniqueConstraint(columnNames = {"customerId", "username", "email"}))
+@Table(name = "t_user", uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "username", "email"}))
 public class User {
     
     @Id
     @Column(unique = true)
-    private Long customerId;
+    private Long userId;
 
     @NotEmpty(message = "You must give a value for first name.")
     @Size(min = 1, max = 30)
@@ -41,12 +41,12 @@ public class User {
     @NotNull
     private Integer subscribed;
 
-    public Long getCustomerId() {
-        return customerId;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setCustomerId(Long customerId) {
-        this.customerId = customerId;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public String getFirstName() {

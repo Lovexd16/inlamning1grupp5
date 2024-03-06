@@ -5,7 +5,7 @@
 -- insert into myentity (id, field) values(3, 'field-3');
 -- alter sequence myentity_seq restart with 4;
 
-INSERT INTO t_customer (customerId, firstName, lastName, email, username, password, subscribed) VALUES
+INSERT INTO t_user (userId, firstName, lastName, email, username, password, subscribed) VALUES
 (123456789, 'John', 'Doe', 'john.doe@example.com', 'john_doe', '$2a$12$hFuUFRFD6UNL8MBADtN0eucfv6DjTcyhERrsIguzPEeKs0C15XkVu', 1),
 (234567890, 'Jane', 'Smith', 'jane.smith@example.com', 'jane_smith', '$2a$12$L/eTW9lweH7v1Dfz9kSC2eV/NKUpuz3.Qvvl5w16wdh3AzZ8F4NwC', 0),
 (345678901, 'Alice', 'Johnson', 'alice.johnson@example.com', 'alice_j', '$2a$12$aW2Brgw.Uk1TOwvQgQNe1.GVV1e1tqj1GvP/vVt7lOeIYV/ePcJoa', 1),
