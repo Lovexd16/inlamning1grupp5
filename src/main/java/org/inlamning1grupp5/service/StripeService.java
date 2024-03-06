@@ -1,5 +1,6 @@
 package org.inlamning1grupp5.service;
 
+import java.util.Arrays;
 import java.util.HashMap;
 
 import org.inlamning1grupp5.model.Guest;
@@ -10,9 +11,12 @@ import com.stripe.model.Customer;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.Price;
 import com.stripe.model.Product;
+import com.stripe.model.Subscription;
 import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.CustomerCreateParams.Address;
+import com.stripe.param.SubscriptionCreateParams.PaymentSettings.SaveDefaultPaymentMethod;
 import com.stripe.param.PaymentIntentCreateParams;
+import com.stripe.param.SubscriptionCreateParams;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -109,5 +113,67 @@ public class StripeService {
             return Response.status(Response.Status.FORBIDDEN).entity("Incorrect username or password").build();
         }
     }
-    
+
+    @Transactional(Transactional.TxType.REQUIRED)
+    public Response activateSubscription(String productId, String username, String password, Guest address) throws StripeException {
+        
+        Product product = Product.retrieve(productId);
+
+        Boolean authenticateCustomer = userService.verifyUser(username, password);
+
+        if (authenticateCustomer == true) {
+            System.out.println(username + "!!!!!!!!");
+
+            Price price = Price.retrieve(product.getDefaultPrice());
+
+            Response findCustomer = userService.findUserByUsername(username);
+            User customerFound = (User) findCustomer.getEntity();
+            String customerName = customerFound.getFirstName() + " " + customerFound.getLastName();
+            
+            CustomerCreateParams customerParams = CustomerCreateParams.builder()
+                .setName(customerName)
+                .setEmail(customerFound.getEmail())
+                .setAddress(Address.builder()
+                    .setCity(address.getCity())
+                    .setLine1(address.getAddress1())
+                    .setLine2(address.getAddress2())
+                    .setPostalCode(address.getPostnumber())
+                    .build())
+                .build();
+            Customer customerFinal = Customer.create(customerParams);
+
+            try {
+            SubscriptionCreateParams.PaymentSettings paymentSettings = 
+                SubscriptionCreateParams.PaymentSettings.builder()
+                .setSaveDefaultPaymentMethod(SaveDefaultPaymentMethod.ON_SUBSCRIPTION)
+                .build();
+
+            SubscriptionCreateParams subCreateParams = 
+                SubscriptionCreateParams.builder()
+                .setCustomer(customerFinal.getId())
+                .addItem(SubscriptionCreateParams.Item.builder()
+                    .setPrice(price.getId())
+                    .build())
+                .setPaymentSettings(paymentSettings)
+                .setPaymentBehavior(SubscriptionCreateParams.PaymentBehavior.DEFAULT_INCOMPLETE)
+                .addAllExpand(Arrays.asList("latest_invoice.payment_intent"))
+                .build();
+
+            Subscription subscription = Subscription.create(subCreateParams);
+
+            HashMap<String, Object> responseData = new HashMap<>();
+            responseData.put("subscriptionId", subscription.getId());
+            responseData.put("clientSecret", subscription.getLatestInvoiceObject().getPaymentIntentObject()
+                .getClientSecret());
+            
+            customerFound.setSubscribed(1);
+            return Response.ok(responseData).build();
+
+            } catch (StripeException e) {
+                return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
+            }
+        } else {
+            return Response.status(Response.Status.FORBIDDEN).entity("Incorrect username or password").build();
+        }
+    }
 }
