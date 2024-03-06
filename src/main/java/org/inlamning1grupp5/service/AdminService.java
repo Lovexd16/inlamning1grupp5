@@ -25,7 +25,7 @@ public class AdminService {
         if (authenticateAdmin == true) {
             return Response.ok().entity("Login successful " + email).build();
         } else {
-            return Response.status(Response.Status.FORBIDDEN).entity("Incorrect email or password").build();
+            return Response.status(Response.Status.NOT_FOUND).entity("Incorrect email or password.").build();
         }
     }
 
@@ -46,7 +46,7 @@ public class AdminService {
         if (authenticateAdmin == true) {
             return Response.ok(em.createQuery("SELECT u FROM User u", User.class).getResultList()).build();
         } else {
-            return Response.status(Response.Status.FORBIDDEN).entity("You are not allowed to do this.").build();
+            return Response.status(Response.Status.NOT_FOUND).entity("Incorrect email or password.").build();
         }
     }
 
@@ -60,10 +60,10 @@ public class AdminService {
                 if (deleteSuccessful > 0) {
                     return Response.ok().entity(username + " successfully deleted.").build(); 
                 } else {
-                    return Response.ok().entity("User account doesnt exist.").build();
+                    return Response.status(Response.Status.NOT_FOUND).entity("User account doesnt exist.").build();
                 }
         } else {
-            return Response.status(Response.Status.FORBIDDEN).entity("You are not allowed to do this.").build();
+            return Response.status(Response.Status.NOT_FOUND).entity("Incorrect email or password.").build();
         }
     }
 
@@ -73,7 +73,7 @@ public class AdminService {
             return Response.ok(em.createQuery("SELECT COUNT(u) FROM User u", Long.class).getSingleResult()).build();
             
         } else {
-            return Response.status(Response.Status.FORBIDDEN).entity("You are not allowed to do this.").build();
+            return Response.status(Response.Status.NOT_FOUND).entity("Incorrect email or password.").build();
         }
     }
 
@@ -83,7 +83,7 @@ public class AdminService {
             return Response.ok(em.createQuery("SELECT COUNT(u) FROM User u WHERE u.subscribed = 1", Long.class).getSingleResult()).build();
             
         } else {
-            return Response.status(Response.Status.FORBIDDEN).entity("You are not allowed to do this.").build();
+            return Response.status(Response.Status.NOT_FOUND).entity("Incorrect email or password.").build();
         }
     }
 
