@@ -75,7 +75,7 @@ public class UserService{
                     return Response.ok().entity("User account doesnt exist.").build();
                 }
             } else {
-                return Response.status(Response.Status.FORBIDDEN).entity("Incorrect username or password. Try again.").build();
+                return Response.status(Response.Status.NOT_FOUND).entity("Incorrect username or password. Try again.").build();
             }
 
     }
@@ -100,7 +100,7 @@ public class UserService{
             user.setPassword("");
             return Response.ok(user).build();
         } else {
-            return Response.status(Response.Status.FORBIDDEN).entity("Incorrect username or password").build();
+            return Response.status(Response.Status.NOT_FOUND).entity("Incorrect username or password").build();
         }
     }
 
@@ -121,7 +121,7 @@ public class UserService{
                 return Response.ok().entity("Your account has not been updated.").build();
             }
         } else {
-            return Response.status(Response.Status.FORBIDDEN).entity("Incorrect username or password").build();
+            return Response.status(Response.Status.NOT_FOUND).entity("Incorrect username or password").build();
         }
     }    
 }

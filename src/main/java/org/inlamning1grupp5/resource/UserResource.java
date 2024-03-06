@@ -1,6 +1,8 @@
 package org.inlamning1grupp5.resource;
 
+import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
+import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.inlamning1grupp5.model.User;
 import org.inlamning1grupp5.service.UserService;
 
@@ -25,6 +27,12 @@ public class UserResource {
     UserService userService;
 
     @POST
+    @Operation(summary = "Create a user.", description = "Create a user and save it in the database.")
+
+    @APIResponse(responseCode = "200", description = "User created successfully.")
+    @APIResponse(responseCode = "400", description = "You must enter firstname(1-30),lastname(1-30), username(5-15), password(no limit) and email(email format).")
+    @APIResponse(responseCode = "409", description = "Email or username is already in use.")
+
     @Path("/create-user-account") 
     public Response createUser(@RequestBody User user) {
 
@@ -37,6 +45,12 @@ public class UserResource {
     }
 
     @GET
+    @Operation(summary = "Login as user", description = "Login as a user that is already saved in the database.")
+
+    @APIResponse(responseCode = "200", description = "Logged in successfully as a user.")
+    @APIResponse(responseCode = "404", description = "Incorrect username or password.")
+    
+
     @Path("/login")
     public Response userAccount(@HeaderParam("username") String username, @HeaderParam("password") String password) {
         
@@ -44,13 +58,24 @@ public class UserResource {
     }
 
     @DELETE
+    @Operation(summary = "Delete your account as a user", description = "Delete your account as a user and remove it from the database.")
+
+    @APIResponse(responseCode = "200", description = "Account deleted successfully as a user.")
+    @APIResponse(responseCode = "404", description = "Incorrect username or password.")
+
     @Path("/delete-user-account")
     public Response deleteUser(@HeaderParam("username") String username, @HeaderParam("password") String password) {
 
         return userService.deleteUserAccount(username, password);
-    }
+ 
+    } 
 
     @PATCH
+    @Operation(summary = "Edit your account as a user", description = "Replace the current information with the new info and save it in the database.")
+
+    @APIResponse(responseCode = "200", description = "Edited account successfully as a user.")
+    @APIResponse(responseCode = "404", description = "Incorrect username or password.")
+
     @Path("/edit-user-account")
     public Response editUser(@HeaderParam("username") String username, @HeaderParam("password") String password, @RequestBody User user) {
 
