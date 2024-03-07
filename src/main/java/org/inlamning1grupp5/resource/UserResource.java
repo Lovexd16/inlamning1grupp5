@@ -89,11 +89,4 @@ public class UserResource {
         return userService.editUserAccount(username, password, user);
     }
 
-    @GET
-    @Produces(MediaType.APPLICATION_OCTET_STREAM)
-    @Path("get-podcast")
-    public Response getPodcast(@HeaderParam("productId") String productId) {
-
-        return userService.getPodcastFromServer(productId);   
-    }
 }

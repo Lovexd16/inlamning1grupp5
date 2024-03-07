@@ -49,7 +49,7 @@ public class UserService{
         } catch (NoResultException e) {
             Random random = new Random();
             user.setUserId(random.nextLong(100000000, 999999999));
-            user.setSubscribed(0);
+            user.setSubscribed("Not subscribed");
             String encrypted = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
             user.setPassword(encrypted);
             System.out.println(user.getLastName());

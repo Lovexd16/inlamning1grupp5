@@ -9,6 +9,7 @@ import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
+import jakarta.ws.rs.PATCH;
 import jakarta.ws.rs.POST;
 import jakarta.ws.rs.Path;
 import jakarta.ws.rs.Produces;
@@ -83,6 +84,18 @@ public class StripeResource {
         } else {
             System.out.println("here: " + username + " " + password);
             return stripeService.activateSubscription(productId, username, password, address);
+        }
+    }
+
+    @PATCH
+    @Path("/cancel-subscription")
+    public Response cancelSubscription(@HeaderParam("username") String username, @HeaderParam("password") String password) {
+
+        if (username == null || password == null) {
+            return Response.status(Response.Status.BAD_REQUEST).entity("You need to enter your username and password!").build();
+        } else {
+            System.out.println("here: " + username + " " + password);
+            return stripeService.cancelSubscription(username, password);
         }
     }
 }

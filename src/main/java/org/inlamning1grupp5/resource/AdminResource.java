@@ -3,6 +3,9 @@ package org.inlamning1grupp5.resource;
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
 import org.inlamning1grupp5.service.AdminService;
+
+import com.stripe.exception.StripeException;
+
 import jakarta.inject.Inject;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.DELETE;
@@ -85,6 +88,12 @@ public class AdminResource {
     @Path("/count-subscribers")
     public Response countSubscribers(@HeaderParam("email") String email, @HeaderParam("password") String password) {
         return adminService.countAllSubscribers(email, password);
+    }
+
+    @GET
+    @Path("/get-customer-by-id")
+    public Response getCustomer(@HeaderParam("email") String email, @HeaderParam("password") String password, @HeaderParam("customerId") String customerId) throws StripeException {
+        return adminService.getCustomerById(email, password, customerId);
     }
 }
 
