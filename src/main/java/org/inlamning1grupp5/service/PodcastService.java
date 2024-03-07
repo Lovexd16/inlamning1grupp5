@@ -5,8 +5,12 @@ import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.StandardOpenOption;
 
+import jakarta.enterprise.context.ApplicationScoped;
+import jakarta.transaction.Transactional;
 import jakarta.ws.rs.core.Response;
 
+@Transactional(Transactional.TxType.SUPPORTS)
+@ApplicationScoped
 public class PodcastService {
     
     public Response getPodcastFromServer(String productId) {
