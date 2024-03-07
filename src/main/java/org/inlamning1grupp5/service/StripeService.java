@@ -2,6 +2,7 @@ package org.inlamning1grupp5.service;
 
 import java.util.Arrays;
 import java.util.HashMap;
+import java.util.List;
 
 import org.inlamning1grupp5.model.Guest;
 import org.inlamning1grupp5.model.User;
@@ -66,6 +67,7 @@ public class StripeService {
         }
     }
 
+    @Transactional(Transactional.TxType.REQUIRED)
     public Response oneTimePurchaseByLogin(String productId, String username, String password, Guest customer) throws StripeException {
         Product product = Product.retrieve(productId);
 
@@ -105,6 +107,9 @@ public class StripeService {
     
                 HashMap<String, String> clientSecretResp = new HashMap<>();
                 clientSecretResp.put("clientSecret", intent.getClientSecret());
+                System.out.println(customerFound.getUserPurchaseHistory());
+                customerFound.getUserPurchaseHistory().add(productId);
+                System.out.println(customerFound.getUserPurchaseHistory());
                 return Response.ok(clientSecretResp).build();
             } catch (StripeException e) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
