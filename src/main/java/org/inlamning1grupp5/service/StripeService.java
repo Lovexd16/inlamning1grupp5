@@ -2,7 +2,6 @@ package org.inlamning1grupp5.service;
 
 import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 
 import org.inlamning1grupp5.model.Guest;
 import org.inlamning1grupp5.model.StripeModel;

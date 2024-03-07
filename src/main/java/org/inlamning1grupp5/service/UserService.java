@@ -1,9 +1,5 @@
 package org.inlamning1grupp5.service;
 
-import java.io.InputStream;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.StandardOpenOption;
 import java.util.Random;
 
 import org.inlamning1grupp5.model.User;
