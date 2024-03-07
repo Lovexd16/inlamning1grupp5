@@ -8,12 +8,12 @@
     );
 
     create table t_user (
-        subscribed integer,
         userId bigint not null,
         email varchar(255) unique,
         firstName varchar(255),
         lastName varchar(255),
         password varchar(255),
+        subscribed varchar(255),
         username varchar(255) unique,
         primary key (userId),
         unique (userId, username, email)

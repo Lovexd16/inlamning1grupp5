@@ -1,6 +1,11 @@
 package org.inlamning1grupp5.service;
 
+import org.inlamning1grupp5.model.StripeModel;
 import org.inlamning1grupp5.model.User;
+
+import com.stripe.Stripe;
+import com.stripe.exception.StripeException;
+import com.stripe.model.Customer;
 
 import jakarta.enterprise.context.ApplicationScoped;
 import jakarta.inject.Inject;
@@ -82,6 +87,21 @@ public class AdminService {
         if (authenticateAdmin == true) {
             return Response.ok(em.createQuery("SELECT COUNT(u) FROM User u WHERE u.subscribed = 1", Long.class).getSingleResult()).build();
             
+        } else {
+            return Response.status(Response.Status.NOT_FOUND).entity("Incorrect email or password.").build();
+        }
+    }
+
+    public Response getCustomerById(String email, String password, String customerId) throws StripeException {
+        Boolean authenticateAdmin = verifyAdmin(email, password);
+        if (authenticateAdmin == true) {
+            Stripe.apiKey = StripeModel.getApiKey();
+            try {
+                Customer customer = Customer.retrieve(customerId);
+                return Response.ok(customer).build();
+            } catch (Exception e) {
+                return Response.status(Response.Status.NOT_FOUND).entity("The customer does not exist.").build();
+            }
         } else {
             return Response.status(Response.Status.NOT_FOUND).entity("Incorrect email or password.").build();
         }

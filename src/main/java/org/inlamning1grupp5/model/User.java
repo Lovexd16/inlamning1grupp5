@@ -46,7 +46,7 @@ public class User {
     private String password;
 
     @NotNull
-    private Integer subscribed;
+    private String subscribed;
 
     @ElementCollection(fetch = FetchType.EAGER)
     @CollectionTable(name = "t_user_purchase_history", joinColumns = @JoinColumn(name = "usedId"))
@@ -101,11 +101,11 @@ public class User {
         this.password = password;
     }
 
-    public Integer getSubscribed() {
+    public String getSubscribed() {
         return subscribed;
     }
 
-    public void setSubscribed(Integer subscribed) {
+    public void setSubscribed(String subscribed) {
         this.subscribed = subscribed;
     }
 

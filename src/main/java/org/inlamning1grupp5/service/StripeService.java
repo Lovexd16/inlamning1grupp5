@@ -5,8 +5,10 @@ import java.util.HashMap;
 import java.util.List;
 
 import org.inlamning1grupp5.model.Guest;
+import org.inlamning1grupp5.model.StripeModel;
 import org.inlamning1grupp5.model.User;
 
+import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.PaymentIntent;
@@ -17,6 +19,7 @@ import com.stripe.param.CustomerCreateParams;
 import com.stripe.param.CustomerCreateParams.Address;
 import com.stripe.param.SubscriptionCreateParams.PaymentSettings.SaveDefaultPaymentMethod;
 import com.stripe.param.PaymentIntentCreateParams;
+import com.stripe.param.SubscriptionCancelParams;
 import com.stripe.param.SubscriptionCreateParams;
 
 import jakarta.enterprise.context.ApplicationScoped;
@@ -171,14 +174,46 @@ public class StripeService {
             responseData.put("clientSecret", subscription.getLatestInvoiceObject().getPaymentIntentObject()
                 .getClientSecret());
             
-            customerFound.setSubscribed(1);
+            customerFound.setSubscribed(subscription.getId());
             return Response.ok(responseData).build();
 
             } catch (StripeException e) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
             }
         } else {
-            return Response.status(Response.Status.FORBIDDEN).entity("Incorrect username or password").build();
+            return Response.status(Response.Status.FORBIDDEN).entity("Incorrect username or password.").build();
+        }
+    }
+
+    @Transactional(Transactional.TxType.REQUIRED)
+    public Response cancelSubscription(String username, String password) {
+        Stripe.apiKey = StripeModel.getApiKey();
+        Boolean authenticateCustomer = userService.verifyUser(username, password);
+        if (authenticateCustomer == true) {
+            System.out.println(1);
+            Response response = userService.getUserAccount(username, password);
+            User user = (User) response.getEntity();
+            System.out.println(user.getSubscribed());
+            if (user.getSubscribed() != "Not subscribed") {
+                System.out.println(2);
+                try {
+                    System.out.println(3);
+                    Subscription resource = Subscription.retrieve(user.getSubscribed());
+                    SubscriptionCancelParams params = SubscriptionCancelParams.builder().build();
+                    Subscription subscription = resource.cancel(params);
+                    user.setSubscribed("Not subscribed");
+                    return Response.ok(subscription).entity("Successfully cancelled subscription.").build();
+                } catch (StripeException e) {
+                    System.out.println(4);
+                    return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
+                }
+            } else {
+                System.out.println(5);
+                return Response.status(Response.Status.NOT_FOUND).entity("You are not subscribed!").build();
+            }
+        } else {
+            System.out.println(6);
+            return Response.status(Response.Status.FORBIDDEN).entity("Incorrect username or password.").build();
         }
     }
 }
