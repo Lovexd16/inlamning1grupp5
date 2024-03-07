@@ -31,17 +31,22 @@ public class UserResource {
     @Operation(summary = "Create a user.", description = "Create a user and save it in the database.")
 
     @APIResponse(responseCode = "200", description = "User created successfully.")
-    @APIResponse(responseCode = "400", description = "You must enter firstname(1-30),lastname(1-30), username(5-15), password(no limit) and email(email format).")
+    @APIResponse(responseCode = "400", description = "The user has not entered a password")
     @APIResponse(responseCode = "409", description = "Email or username is already in use.")
+    @APIResponse(responseCode = "500", description = "You must enter firstname(1-30),lastname(1-30), username(5-15), password(no limit) and email(email format).")
 
     @Path("/create-user-account") 
     public Response createUser(@RequestBody User user) {
-
+        
+        if (user.getPassword() != null && user.getPassword().trim() != "") {
         try {
-            return userService.createNewUser(user);
-        } catch (Exception e) {
-            System.out.println(e);
-            return Response.status(Response.Status.BAD_REQUEST).entity("There was a problem creating your account").build();
+                return userService.createNewUser(user);
+            } catch (Exception e) {
+                System.out.println(e);
+                return Response.status(Response.Status.INTERNAL_SERVER_ERROR).entity("There was a problem creating your account.").build();
+            }
+        } else {
+            return Response.status(Response.Status.BAD_REQUEST).entity("You must choose a password.").build();
         }
     }
 

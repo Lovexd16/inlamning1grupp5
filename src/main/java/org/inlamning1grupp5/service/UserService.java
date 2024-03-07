@@ -1,13 +1,11 @@
 package org.inlamning1grupp5.service;
 
-import java.io.IOException;
 import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.NoSuchFileException;
 import java.nio.file.StandardOpenOption;
 import java.util.Random;
 
-import org.eclipse.microprofile.config.inject.ConfigProperty;
 import org.inlamning1grupp5.model.User;
 import org.mindrot.jbcrypt.BCrypt;
 
@@ -24,10 +22,6 @@ public class UserService{
 
     @Inject
     EntityManager em;
-
-    @Inject
-    @ConfigProperty(name = "mp3.file.path")
-    String mp3FilePath;
 
     public Response findUserByUsername(String username) {
         try {
