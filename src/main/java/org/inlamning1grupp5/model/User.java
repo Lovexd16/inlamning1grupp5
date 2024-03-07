@@ -1,14 +1,21 @@
 package org.inlamning1grupp5.model;
 
+import jakarta.persistence.CollectionTable;
 import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Table;
 import jakarta.persistence.UniqueConstraint;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Size;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Table(name = "t_user", uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "username", "email"}))
@@ -40,6 +47,11 @@ public class User {
 
     @NotNull
     private Integer subscribed;
+
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "t_user_purchase_history", joinColumns = @JoinColumn(name = "usedId"))
+    @Column(name = "userPurchaseHistory")
+    private List<String> userPurchaseHistory = new ArrayList<>();
 
     public Long getUserId() {
         return userId;
@@ -95,6 +107,14 @@ public class User {
 
     public void setSubscribed(Integer subscribed) {
         this.subscribed = subscribed;
+    }
+
+    public List<String> getUserPurchaseHistory() {
+        return userPurchaseHistory;
+    }
+
+    public void setUserPurchaseHistory(List<String> userPurchaseHistory) {
+        this.userPurchaseHistory = userPurchaseHistory;
     }
 
     
