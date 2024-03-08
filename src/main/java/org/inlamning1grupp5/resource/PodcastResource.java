@@ -3,6 +3,7 @@ package org.inlamning1grupp5.resource;
 import org.inlamning1grupp5.service.PodcastService;
 
 import jakarta.inject.Inject;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
@@ -24,5 +25,11 @@ public class PodcastResource {
     @Path("/get-podcast")
     public Response getPodcast(@HeaderParam("productId") String productId) {
         return podcastService.getPodcastFromServer(productId);   
+    }
+
+    @GET
+    @Path("/get-all-podcasts")
+    public Response getAllPodcasts(@HeaderParam("username") @NotEmpty String username) {
+        return podcastService.getAllPodcastsForSubscriber(username);
     }
 }
