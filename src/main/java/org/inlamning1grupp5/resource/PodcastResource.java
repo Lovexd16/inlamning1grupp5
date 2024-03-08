@@ -23,7 +23,6 @@ public class PodcastResource {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     @Path("/get-podcast")
     public Response getPodcast(@HeaderParam("productId") String productId) {
-
         return podcastService.getPodcastFromServer(productId);   
     }
 }
