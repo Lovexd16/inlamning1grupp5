@@ -19,6 +19,7 @@ import jakarta.ws.rs.core.Response;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Price;
 import com.stripe.model.Product;
 import com.stripe.model.ProductCollection;
 import com.stripe.param.ProductListParams;
@@ -43,7 +44,7 @@ public class StripeResource {
     @Path("/get-all-products")
     public Response getAllProducts() throws StripeException {
         Stripe.apiKey = StripeModel.getApiKey();
-        ProductListParams params = ProductListParams.builder().setLimit(3L).build();
+        ProductListParams params = ProductListParams.builder().setLimit(24L).build();
         ProductCollection products = Product.list(params);
 
         return Response.ok(products).build();
@@ -60,8 +61,8 @@ public class StripeResource {
 
     @POST
     @Path("/one-time-purchase")
-    public Response oneTimePurchase(@HeaderParam("productId") String productId, @HeaderParam("username") @NotEmpty String username,
-        @HeaderParam("password") @NotEmpty String password, @RequestBody Guest customer) throws StripeException {
+    public Response oneTimePurchase(@HeaderParam("productId") String productId, @HeaderParam("username") String username,
+        @HeaderParam("password") String password, @RequestBody Guest customer) throws StripeException {
         
         Stripe.apiKey = StripeModel.getApiKey();
 
@@ -97,5 +98,11 @@ public class StripeResource {
         } else {
             return stripeService.cancelSubscription(username, password);
         }
+    }
+
+    @GET
+    @Path("/get-product-price")
+    public Response getProductPrice(@HeaderParam("priceId") @NotEmpty String priceId) throws StripeException {
+        return Response.ok(Price.retrieve(priceId)).build();
     }
 }

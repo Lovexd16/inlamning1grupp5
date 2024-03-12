@@ -32,4 +32,11 @@ public class PodcastResource {
     public Response getAllPodcasts(@HeaderParam("username") @NotEmpty String username) {
         return podcastService.getAllPodcastsForSubscriber(username);
     }
+
+    @GET
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Path("/get-free-podcasts")
+    public Response getFreePodcasts(@HeaderParam("episodeNumber") int episodeNumber) {
+        return podcastService.getAllFreePodcasts(episodeNumber);
+    }
 }
