@@ -6,6 +6,7 @@ import org.inlamning1grupp5.model.StripeModel;
 import org.inlamning1grupp5.service.StripeService;
 
 import jakarta.inject.Inject;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
@@ -18,6 +19,7 @@ import jakarta.ws.rs.core.Response;
 
 import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Price;
 import com.stripe.model.Product;
 import com.stripe.model.ProductCollection;
 import com.stripe.param.ProductListParams;
@@ -30,7 +32,6 @@ public class StripeResource {
     @Inject
     StripeService stripeService;
     
-
     @GET
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/get-public-key")
@@ -43,7 +44,7 @@ public class StripeResource {
     @Path("/get-all-products")
     public Response getAllProducts() throws StripeException {
         Stripe.apiKey = StripeModel.getApiKey();
-        ProductListParams params = ProductListParams.builder().setLimit(3L).build();
+        ProductListParams params = ProductListParams.builder().setLimit(24L).build();
         ProductCollection products = Product.list(params);
 
         return Response.ok(products).build();
@@ -64,6 +65,7 @@ public class StripeResource {
         @HeaderParam("password") String password, @RequestBody Guest customer) throws StripeException {
         
         Stripe.apiKey = StripeModel.getApiKey();
+
         if (username == null && password == null) {
             return stripeService.oneTimePurchaseAsGuest(productId, customer);
         } else {
@@ -74,8 +76,8 @@ public class StripeResource {
 
     @POST
     @Path("/activate-subscription")
-    public Response subcribe(@HeaderParam("productId") String productId, @HeaderParam("username") String username,
-    @HeaderParam("password") String password, Guest address) throws StripeException {
+    public Response subcribe(@HeaderParam("productId") String productId, @HeaderParam("username") @NotEmpty String username,
+    @HeaderParam("password") @NotEmpty String password, Guest address) throws StripeException {
 
         Stripe.apiKey = StripeModel.getApiKey();
 
@@ -89,13 +91,18 @@ public class StripeResource {
 
     @PATCH
     @Path("/cancel-subscription")
-    public Response cancelSubscription(@HeaderParam("username") String username, @HeaderParam("password") String password) {
+    public Response cancelSubscription(@HeaderParam("username") @NotEmpty String username, @HeaderParam("password") @NotEmpty String password) {
 
         if (username == null || password == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("You need to enter your username and password!").build();
         } else {
-            System.out.println("here: " + username + " " + password);
             return stripeService.cancelSubscription(username, password);
         }
+    }
+
+    @GET
+    @Path("/get-product-price")
+    public Response getProductPrice(@HeaderParam("priceId") @NotEmpty String priceId) throws StripeException {
+        return Response.ok(Price.retrieve(priceId)).build();
     }
 }

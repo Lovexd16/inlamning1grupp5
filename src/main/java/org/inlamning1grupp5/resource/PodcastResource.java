@@ -3,6 +3,7 @@ package org.inlamning1grupp5.resource;
 import org.inlamning1grupp5.service.PodcastService;
 
 import jakarta.inject.Inject;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.ws.rs.Consumes;
 import jakarta.ws.rs.GET;
 import jakarta.ws.rs.HeaderParam;
@@ -23,7 +24,19 @@ public class PodcastResource {
     @Produces(MediaType.APPLICATION_OCTET_STREAM)
     @Path("/get-podcast")
     public Response getPodcast(@HeaderParam("productId") String productId) {
-
         return podcastService.getPodcastFromServer(productId);   
+    }
+
+    @GET
+    @Path("/get-all-podcasts")
+    public Response getAllPodcasts(@HeaderParam("username") @NotEmpty String username) {
+        return podcastService.getAllPodcastsForSubscriber(username);
+    }
+
+    @GET
+    @Produces(MediaType.APPLICATION_OCTET_STREAM)
+    @Path("/get-free-podcasts")
+    public Response getFreePodcasts(@HeaderParam("episodeNumber") int episodeNumber) {
+        return podcastService.getAllFreePodcasts(episodeNumber);
     }
 }

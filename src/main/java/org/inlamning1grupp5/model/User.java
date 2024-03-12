@@ -42,7 +42,7 @@ public class User {
     @Size(min = 5, max = 15)
     private String username;
 
-    @NotEmpty(message = "You must give a value for password.")
+    // @NotEmpty(message = "You must give a value for password.")
     private String password;
 
     @NotNull
