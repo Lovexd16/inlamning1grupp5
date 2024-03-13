@@ -51,7 +51,7 @@ public class UserService{
             System.out.println(user.getLastName());
             System.out.println(user.getUserId());
             em.persist(user);
-            return Response.ok(user).entity("You have successfully created an account!").build();
+            return Response.ok(user).build();
         }
     }
 
@@ -116,9 +116,11 @@ public class UserService{
                 .setParameter("password", BCrypt.hashpw(user.getPassword(), BCrypt.gensalt()))
                 .executeUpdate();
             if (editSuccessful > 0) {
-                return Response.ok().entity(username + " successfully updated.").build(); 
+                Response response = findUserByUsername(username);
+                User updatedUser = (User) response.getEntity();
+                return Response.ok(updatedUser).build(); 
             } else {
-                return Response.ok().entity("Your account has not been updated.").build();
+                return Response.status(Response.Status.BAD_REQUEST).entity("Your account has not been updated.").build();
             }
         } else {
             return Response.status(Response.Status.NOT_FOUND).entity("Incorrect username or password").build();
