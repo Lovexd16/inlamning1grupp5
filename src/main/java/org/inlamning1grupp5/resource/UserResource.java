@@ -1,5 +1,7 @@
 package org.inlamning1grupp5.resource;
 
+import java.util.UUID;
+
 import org.eclipse.microprofile.openapi.annotations.Operation;
 import org.eclipse.microprofile.openapi.annotations.parameters.RequestBody;
 import org.eclipse.microprofile.openapi.annotations.responses.APIResponse;
@@ -74,6 +76,12 @@ public class UserResource {
     @Path("/edit-user-account")
     public Response editUser(@HeaderParam("username") @NotEmpty String username, @HeaderParam("password") @NotEmpty String password, @RequestBody @NotNull User user) {
         return userService.editUserAccount(username, password, user);
+    }
+
+    @GET
+    @Path("/get-user-by-id")
+    public Response getUserById(@HeaderParam("userId") UUID userId) {
+        return userService.getUserByUserId(userId);
     }
 
 }

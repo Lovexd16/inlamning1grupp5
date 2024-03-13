@@ -16,6 +16,7 @@ import jakarta.validation.constraints.Size;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 @Entity
 @Table(name = "t_user", uniqueConstraints = @UniqueConstraint(columnNames = {"userId", "username", "email"}))
@@ -23,7 +24,7 @@ public class User {
     
     @Id
     @Column(unique = true)
-    private Long userId;
+    private UUID userId;
 
     @NotEmpty(message = "You must give a value for first name.")
     @Size(min = 1, max = 30)
@@ -53,11 +54,11 @@ public class User {
     @Column(name = "userPurchaseHistory")
     private List<String> userPurchaseHistory = new ArrayList<>();
 
-    public Long getUserId() {
+    public UUID getUserId() {
         return userId;
     }
 
-    public void setUserId(Long userId) {
+    public void setUserId(UUID userId) {
         this.userId = userId;
     }
 
