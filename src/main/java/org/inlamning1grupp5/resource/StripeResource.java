@@ -77,7 +77,7 @@ public class StripeResource {
     @POST
     @Path("/activate-subscription")
     public Response subcribe(@HeaderParam("productId") String productId, @HeaderParam("username") @NotEmpty String username,
-    @HeaderParam("password") @NotEmpty String password, Guest address) throws StripeException {
+    @HeaderParam("password") @NotEmpty String password, @RequestBody Guest address) throws StripeException {
 
         Stripe.apiKey = StripeModel.getApiKey();
 
