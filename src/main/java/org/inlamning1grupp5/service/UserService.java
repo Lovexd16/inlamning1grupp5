@@ -1,6 +1,7 @@
 package org.inlamning1grupp5.service;
 
 import java.util.Random;
+import java.util.UUID;
 
 import org.inlamning1grupp5.model.User;
 import org.mindrot.jbcrypt.BCrypt;
@@ -43,8 +44,9 @@ public class UserService{
             em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class).setParameter("username", user.getUsername()).getSingleResult();
             return Response.status(Response.Status.CONFLICT).entity("This username is already in use! Both the email and the username must be unique.").build();
         } catch (NoResultException e) {
-            Random random = new Random();
-            user.setUserId(random.nextLong(100000000, 999999999));
+            // Random random = new Random();
+            // user.setUserId(random.nextLong(100000000, 999999999));
+            user.setUserId(UUID.randomUUID());
             user.setSubscribed("Not subscribed");
             String encrypted = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
             user.setPassword(encrypted);
@@ -124,6 +126,17 @@ public class UserService{
             }
         } else {
             return Response.status(Response.Status.NOT_FOUND).entity("Incorrect username or password").build();
+        }
+    }
+
+    public Response getUserByUserId(UUID userId) {
+        try {
+            return Response.ok(em.createQuery("SELECT u FROM User u WHERE u.userId = :userId", User.class)
+                .setParameter("userId", userId)
+                .getSingleResult()).build();
+        } catch (NoResultException e) {
+            System.out.println(e);
+            return Response.status(Response.Status.NOT_FOUND).entity("No user found.").build();
         }
     }
 
