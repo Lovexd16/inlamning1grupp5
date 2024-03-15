@@ -1,6 +1,5 @@
 package org.inlamning1grupp5.service;
 
-import java.util.Random;
 import java.util.UUID;
 
 import org.inlamning1grupp5.model.User;

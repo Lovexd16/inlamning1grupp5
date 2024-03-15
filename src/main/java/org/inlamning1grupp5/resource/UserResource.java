@@ -79,6 +79,10 @@ public class UserResource {
     }
 
     @GET
+    @Operation(summary = "Retrieve a single user.", description = "Use a users unique ID number to retrieve their details from the database.")
+    @APIResponse(responseCode = "200", description = "User retrieved successfully.")
+    @APIResponse(responseCode = "404", description = "The user ID was not found in the database")
+    @APIResponse(responseCode = "500", description = "Unknown server error.")
     @Path("/get-user-by-id")
     public Response getUserById(@HeaderParam("userId") UUID userId) {
         return userService.getUserByUserId(userId);
