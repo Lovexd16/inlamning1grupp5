@@ -1,4 +1,72 @@
-# inlamning1grupp5
+# E-Sales Platform Server
+
+Welcome to the server side of our e-sales platform project! This project is part of a school project where we design, develop, and present a Minimum Viable Product (MVP) for an e-sales platform. Our platform is specifically tailored for podcasts to present and sell their content, along with merchandise sales.
+
+## Project Description
+
+Our e-sales platform allows podcast creators to showcase their episodes and merchandise for sale to their audience. The platform is built using the Quarkus/Jakarta EE framework and integrates with Stripe for payment processing.
+
+## Team Members
+
+- David Hankin
+- Victor Juhlin
+- Love Rumar Karlquist
+
+## Getting Started
+
+To clone and start the server yourself, follow these steps:
+
+1. Clone the repository to your local machine:
+```shell script
+git@github.com:Lovexd16/inlamning1grupp5.git
+```
+
+2. Navigate to the project directory:
+```shell script
+cd e-sales-platform-server
+```
+
+3. Insert your own private and publishable keys in the `StripeModel` and `StripeResource` files, respectively. These files are located in the following directories:
+- `src/main/java/org/inlamning1grupp5/model/StripeModel.java`
+- `src/main/java/org/inlamning1grupp5/model/StripeResource.java`
+
+4. Build the project:
+```shell script
+./mvnw clean package
+```
+
+5. Run the server:
+```shell script
+java -jar target/e-sales-platform-server.jar
+```
+
+
+6. The server should now be running locally on port 8080.
+
+## Usage
+
+Once the server is running, you can interact with it using HTTP requests to create, retrieve, update, and delete podcast episodes, as well as manage merchandise sales.
+
+## Client
+
+The client side of our e-sales platform project is available at [e-sales-platform-client](https://github.com/Lovexd16/inlamning1grupp5-FRONTEND). Be sure to check it out for the full experience!
+
+## Contributing
+
+Thank you for considering contributing to our project! If you would like to contribute, please submit a pull request with your proposed changes.
+
+## Issues
+
+If you encounter any issues or have any questions, please feel free to open an issue on GitHub and we will do our best to assist you.
+
+Sincerely,
+The Team.
+
+(Javautveckling, Jönköping University, Sweden)
+
+
+
+*Below is content generated automatically by the Quarkus framework*
 
 This project uses Quarkus, the Supersonic Subatomic Java Framework.
 
