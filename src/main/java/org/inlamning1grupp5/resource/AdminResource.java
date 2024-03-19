@@ -79,6 +79,10 @@ public class AdminResource {
     }
 
     @GET
+    @Operation(summary = "Retrieve a single user.", description = "Use a users unique ID number along with your admin credetials to retrieve their details from the database.")
+    @APIResponse(responseCode = "200", description = "User retrieved successfully.")
+    @APIResponse(responseCode = "404", description = "The user ID was not found in the database")
+    @APIResponse(responseCode = "500", description = "Unknown server error.")
     @Path("/get-customer-by-id")
     public Response getCustomer(@HeaderParam("email") @NotEmpty String email, @HeaderParam("password") @NotEmpty String password, @HeaderParam("customerId") @NotEmpty String customerId) throws StripeException {
         return adminService.getCustomerById(email, password, customerId);

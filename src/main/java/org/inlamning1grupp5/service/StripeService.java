@@ -204,7 +204,7 @@ public class StripeService {
                     return Response.ok(subscription).entity("Successfully cancelled subscription.").build();
                 } catch (StripeException e) {
                     System.out.println(4);
-                    return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
+                    return Response.status(Response.Status.EXPECTATION_FAILED).entity(e).build();
                 }
             } else {
                 System.out.println(5);
