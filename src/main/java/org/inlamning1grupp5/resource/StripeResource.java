@@ -125,10 +125,10 @@ public class StripeResource {
     @APIResponse(responseCode = "404", description = "You are not currently subscribed.")
     @APIResponse(responseCode = "417", description = "Problem communicating with Stripe. Please try again.")
     @APIResponse(responseCode = "500", description = "Unknown server error.")
-    public Response cancelSubscription(@HeaderParam("username") @NotEmpty String username, @HeaderParam("password") @NotEmpty String password) {
+    public Response cancelSubscription(@HeaderParam("username") @NotEmpty String username, @HeaderParam("password") String password) {
 
         if (username == null || password == null) {
-            return Response.status(Response.Status.BAD_REQUEST).entity("You need to enter your username and password!").build();
+            return Response.status(Response.Status.BAD_REQUEST).entity("You need to enter your password!").build();
         } else {
             return stripeService.cancelSubscription(username, password);
         }

@@ -36,15 +36,13 @@ public class UserService{
         try {
             try {
                 em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class).setParameter("email", user.getEmail()).getSingleResult();
-                return Response.status(Response.Status.CONFLICT).entity("This email adress is already connected to an account! Both the email and the username must be unique.").build();
+                return Response.status(Response.Status.CONFLICT).entity("This email address is already connected to an account! Both the email and the username must be unique.").build();
             } catch (Exception e) {
                 System.out.println(e);
             }
             em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class).setParameter("username", user.getUsername()).getSingleResult();
             return Response.status(Response.Status.CONFLICT).entity("This username is already in use! Both the email and the username must be unique.").build();
         } catch (NoResultException e) {
-            // Random random = new Random();
-            // user.setUserId(random.nextLong(100000000, 999999999));
             user.setUserId(UUID.randomUUID());
             user.setSubscribed("Not subscribed");
             String encrypted = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
@@ -73,10 +71,10 @@ public class UserService{
                 if (deleteSuccessful > 0) {
                     return Response.ok().entity(username + " successfully deleted.").build(); 
                 } else {
-                    return Response.ok().entity("User account doesnt exist.").build();
+                    return Response.status(Response.Status.NOT_FOUND).entity("User account doesnt exist.").build();
                 }
             } else {
-                return Response.status(Response.Status.NOT_FOUND).entity("Incorrect username or password. Try again.").build();
+                return Response.status(Response.Status.NOT_FOUND).entity("Incorrect password.").build();
             }
 
     }
