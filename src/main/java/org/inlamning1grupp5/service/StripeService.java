@@ -76,8 +76,6 @@ public class StripeService {
         Boolean authenticateCustomer = userService.verifyUser(username, password);
 
         if (authenticateCustomer == true) {
-            System.out.println(username + "!!!!!!!!");
-
             Price price = Price.retrieve(product.getDefaultPrice());
 
             Response findCustomer = userService.findUserByUsername(username);
@@ -109,9 +107,7 @@ public class StripeService {
     
                 HashMap<String, String> clientSecretResp = new HashMap<>();
                 clientSecretResp.put("clientSecret", intent.getClientSecret());
-                System.out.println(customerFound.getUserPurchaseHistory());
                 customerFound.getUserPurchaseHistory().add(productId);
-                System.out.println(customerFound.getUserPurchaseHistory());
                 return Response.ok(clientSecretResp).build();
             } catch (StripeException e) {
                 return Response.status(Response.Status.BAD_REQUEST).entity(e).build();
@@ -129,8 +125,6 @@ public class StripeService {
         Boolean authenticateCustomer = userService.verifyUser(username, password);
 
         if (authenticateCustomer == true) {
-            System.out.println(username + "!!!!!!!!");
-
             Price price = Price.retrieve(product.getDefaultPrice());
 
             Response findCustomer = userService.findUserByUsername(username);
@@ -189,29 +183,22 @@ public class StripeService {
         Stripe.apiKey = StripeModel.getApiKey();
         Boolean authenticateCustomer = userService.verifyUser(username, password);
         if (authenticateCustomer == true) {
-            System.out.println(1);
             Response response = userService.getUserAccount(username, password);
             User user = (User) response.getEntity();
-            System.out.println(user.getSubscribed());
             if (user.getSubscribed() != "Not subscribed") {
-                System.out.println(2);
                 try {
-                    System.out.println(3);
                     Subscription resource = Subscription.retrieve(user.getSubscribed());
                     SubscriptionCancelParams params = SubscriptionCancelParams.builder().build();
                     Subscription subscription = resource.cancel(params);
                     user.setSubscribed("Not subscribed");
                     return Response.ok(subscription).entity("Successfully cancelled subscription.").build();
                 } catch (StripeException e) {
-                    System.out.println(4);
                     return Response.status(Response.Status.EXPECTATION_FAILED).entity(e).build();
                 }
             } else {
-                System.out.println(5);
                 return Response.status(Response.Status.NOT_FOUND).entity("You are not subscribed!").build();
             }
         } else {
-            System.out.println(6);
             return Response.status(Response.Status.FORBIDDEN).entity("Incorrect username or password.").build();
         }
     }

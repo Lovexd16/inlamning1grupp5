@@ -91,7 +91,6 @@ public class StripeResource {
         if (username == null && password == null) {
             return stripeService.oneTimePurchaseAsGuest(productId, customer);
         } else {
-            System.out.println("here: " + username + " " + password);
             return stripeService.oneTimePurchaseByLogin(productId, username, password, customer);
         }
     }
@@ -111,7 +110,6 @@ public class StripeResource {
         if (username == null || password == null) {
             return Response.status(Response.Status.BAD_REQUEST).entity("You need to enter your username and password!").build();
         } else {
-            System.out.println("here: " + username + " " + password);
             return stripeService.activateSubscription(productId, username, password, address);
         }
     }
