@@ -22,7 +22,7 @@ public class PodcastService {
     public Response getPodcastFromServer(String productId) {
 
         try {
-            String newPath = "C:\\Users\\david\\repos\\github\\Pod grupp5\\inlamning1grupp5\\src\\main\\resources\\META-INF\\resources\\" + productId + ".mp3";
+            String newPath = "C:\\Users\\loveb\\OneDrive\\Dokument\\GitHub\\inlamning1grupp5\\src\\main\\resources\\META-INF\\resources\\" + productId + ".mp3";
             java.nio.file.Path filePath = java.nio.file.Path.of(newPath);
             InputStream audioFile = Files.newInputStream(filePath, StandardOpenOption.READ);
             return Response.ok(audioFile).build();
@@ -35,7 +35,7 @@ public class PodcastService {
 
     public Response getAllPodcastsForSubscriber(@NotEmpty String username) {
         List<InputStream> allPodcasts = new ArrayList<>();
-        String staticResourcePath = "C:\\Users\\david\\repos\\github\\Pod grupp5\\inlamning1grupp5\\src\\main\\resources\\META-INF\\resources\\";
+        String staticResourcePath = "C:\\Users\\loveb\\OneDrive\\Dokument\\GitHub\\inlamning1grupp5\\src\\main\\resources\\META-INF\\resources\\";
         File staticResources = new File(staticResourcePath);
         File[] staticFiles = staticResources.listFiles();
         
@@ -63,7 +63,7 @@ public class PodcastService {
 
     public Response getAllFreePodcasts(int episodeNumber) {
         try {
-            String newPath = "C:\\Users\\david\\repos\\github\\Pod grupp5\\inlamning1grupp5\\src\\main\\resources\\META-INF\\resources\\episode" + episodeNumber + "Free.mp3";
+            String newPath = "C:\\Users\\loveb\\OneDrive\\Dokument\\GitHub\\inlamning1grupp5\\src\\main\\resources\\META-INF\\resources\\episode" + episodeNumber + "Free.mp3";
             java.nio.file.Path filePath = java.nio.file.Path.of(newPath);
             InputStream audioFile = Files.newInputStream(filePath, StandardOpenOption.READ);
             return Response.ok(audioFile).build();

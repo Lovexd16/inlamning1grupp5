@@ -25,7 +25,6 @@ public class UserService{
                 .setParameter("username", username)
                 .getSingleResult()).build();
         } catch (NoResultException e) {
-            System.out.println(e);
             return Response.status(Response.Status.NOT_FOUND).entity("No user found.").build();
         }
     }
@@ -38,7 +37,6 @@ public class UserService{
                 em.createQuery("SELECT u FROM User u WHERE u.email = :email", User.class).setParameter("email", user.getEmail()).getSingleResult();
                 return Response.status(Response.Status.CONFLICT).entity("This email address is already connected to an account! Both the email and the username must be unique.").build();
             } catch (Exception e) {
-                System.out.println(e);
             }
             em.createQuery("SELECT u FROM User u WHERE u.username = :username", User.class).setParameter("username", user.getUsername()).getSingleResult();
             return Response.status(Response.Status.CONFLICT).entity("This username is already in use! Both the email and the username must be unique.").build();
@@ -47,8 +45,6 @@ public class UserService{
             user.setSubscribed("Not subscribed");
             String encrypted = BCrypt.hashpw(user.getPassword(), BCrypt.gensalt());
             user.setPassword(encrypted);
-            System.out.println(user.getLastName());
-            System.out.println(user.getUserId());
             em.persist(user);
             return Response.ok(user).build();
         }
@@ -58,7 +54,6 @@ public class UserService{
     public Response deleteUserAccount(String username, String password) {
 
             Boolean userAuthenticated = verifyUser(username, password);
-            System.out.println(userAuthenticated);
             if (userAuthenticated == true) {
                 Response customResponse = findUserByUsername(username);
                 User user = (User) customResponse.getEntity();
@@ -67,7 +62,6 @@ public class UserService{
                     .setParameter("username", username)
                     .setParameter("password", encryptedPassword)
                     .executeUpdate();
-                System.out.println("success: " + deleteSuccessful);
                 if (deleteSuccessful > 0) {
                     return Response.ok().entity(username + " successfully deleted.").build(); 
                 } else {
@@ -86,7 +80,6 @@ public class UserService{
             String encryptedPassword = user.getPassword();
             return BCrypt.checkpw(password, encryptedPassword);
         } catch (Exception e) {
-            System.out.println(e);
             return false;
         }
     }
@@ -96,7 +89,6 @@ public class UserService{
         if (authenticateUser == true) {
             Response response = findUserByUsername(username);
             User user = (User) response.getEntity();
-            user.setPassword("");
             return Response.ok(user).build();
         } else {
             return Response.status(Response.Status.NOT_FOUND).entity("Incorrect username or password").build();
@@ -132,7 +124,6 @@ public class UserService{
                 .setParameter("userId", userId)
                 .getSingleResult()).build();
         } catch (NoResultException e) {
-            System.out.println(e);
             return Response.status(Response.Status.NOT_FOUND).entity("No user found.").build();
         }
     }
