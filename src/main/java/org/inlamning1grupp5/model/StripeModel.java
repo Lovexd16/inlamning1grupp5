@@ -2,7 +2,7 @@ package org.inlamning1grupp5.model;
 
 public abstract class StripeModel {
     
-    private static final String ApiKey = "sk_test_51OmBbZG7YXGZMv5O6VM4IpxRTw2RFvVTchcEYVZEnFYWcqqbEU70MR0iF4VCnIYGJBgqEl1FuKiX5DQUraAsfE8n0087WaYA6Z";
+    private static final String ApiKey = "";
 
     public static String getApiKey() {
         return ApiKey;

@@ -42,7 +42,7 @@ public class StripeResource {
     @Produces(MediaType.TEXT_PLAIN)
     @Path("/get-public-key")
     public Response getPublicKey() {
-        String publicKey = "pk_test_51OmBbZG7YXGZMv5ODxHfCK3Fuf6kXwfdu3jOvqR7lY84yLTwuaLWOP3Btaej3YJ7a11uqYIBKY6iv20wSZ5U7HxY0076nIcBI4";
+        String publicKey = "";
         return Response.ok(publicKey).build();
     }
 
